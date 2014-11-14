@@ -13,12 +13,21 @@ elinimating overhead.
 Most of this setup comes from the excellent tutorial on 
 https://uwsgi.readthedocs.org/en/latest/tutorials/Django_and_nginx.html
 
+This repo is a fork of https://github.com/dockerfiles/django-uwsgi-nginx,
+I made some fixes to have the image working out-of-the-box.
+
 Feel free to clone this and modify it to your liking. And feel free to 
 contribute patches.
 
 ### Build and run
 * docker build -t webapp .
-* docker run -d webapp
+* docker run -d -p 80:80 webapp
+
+### Test
+
+`curl localhost`
+
+You should see the HTML source of Django welcome page.
 
 ### How to insert your application
 
