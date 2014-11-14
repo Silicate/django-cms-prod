@@ -18,20 +18,19 @@ maintainer Dockerfiles
 
 run echo "deb http://us.archive.ubuntu.com/ubuntu/ precise-updates main restricted" | tee -a /etc/apt/sources.list.d/precise-updates.list
 
+# add nginx stable ppa
+run add-apt-repository -y ppa:nginx/stable
+# update packages
 run apt-get update
+# install required packages
 run apt-get install -y git
-run apt-get install -y python python-dev python-setuptools
+run apt-get install -y python python-dev python-setuptools python-software-properties
+run apt-get install -y sqlite3
 run apt-get install -y nginx supervisor
 run easy_install pip
 
 # install uwsgi now because it takes a little while
 run pip install uwsgi
-
-# install nginx
-run apt-get install -y python-software-properties
-run apt-get update
-run add-apt-repository -y ppa:nginx/stable
-run apt-get install -y sqlite3
 
 # install our code
 add . /home/docker/code/
@@ -47,7 +46,7 @@ run pip install -r /home/docker/code/app/requirements.txt
 
 # install django, normally you would remove this step because your project would already
 # be installed in the code/app/ directory
-run django-admin.py startproject website /home/docker/code/app/ 
+run django-admin.py startproject website /home/docker/code/app/
 
 expose 80
 cmd ["supervisord", "-n"]
