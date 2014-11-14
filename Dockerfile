@@ -18,15 +18,22 @@ maintainer baxeico
 
 run echo "deb http://us.archive.ubuntu.com/ubuntu/ precise-updates main restricted" | tee -a /etc/apt/sources.list.d/precise-updates.list
 
-# add nginx stable ppa
-run add-apt-repository -y ppa:nginx/stable
 # update packages
 run apt-get update
+
 # install required packages
-run apt-get install -y git
 run apt-get install -y python python-dev python-setuptools python-software-properties
 run apt-get install -y sqlite3
-run apt-get install -y nginx supervisor
+run apt-get install -y supervisor
+
+# add nginx stable ppa
+run add-apt-repository -y ppa:nginx/stable
+# update packages after adding nginx repository
+run apt-get update
+# install latest stable nginx
+run apt-get install -y nginx
+
+# install pip
 run easy_install pip
 
 # install uwsgi now because it takes a little while
