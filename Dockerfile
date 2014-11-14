@@ -14,7 +14,7 @@
 
 from ubuntu:precise
 
-maintainer Dockerfiles
+maintainer baxeico
 
 run echo "deb http://us.archive.ubuntu.com/ubuntu/ precise-updates main restricted" | tee -a /etc/apt/sources.list.d/precise-updates.list
 
