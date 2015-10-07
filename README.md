@@ -1,5 +1,8 @@
 # Django, uWSGI and Nginx in a container
 
+#### just forked from baxeico/django-uwsgi-nginx
+##### starting to add django-cms
+
 This Dockerfile allows you to build a Docker container with a fairly standard
 and speedy setup for Django with uWSGI and Nginx.
 
