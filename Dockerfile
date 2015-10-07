@@ -14,7 +14,7 @@
 
 from ubuntu:precise
 
-maintainer baxeico
+maintainer Christian Wagner <chriswayg@gmail.com>
 
 run echo "deb http://us.archive.ubuntu.com/ubuntu/ precise-updates main restricted" | tee -a /etc/apt/sources.list.d/precise-updates.list
 
