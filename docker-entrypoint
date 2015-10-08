@@ -1,0 +1,55 @@
+#!/bin/bash
+set -e
+
+# The script installs Django-CMS, only on first run of container
+#   - the site will be installed in /cms/website1
+#   - it will use install options provided from environment variables
+#   - it will preserve data when recreating containers
+#   - it enables installing into a mounted docker data-volume
+#   - it can optionally restore a previously backed-up project
+
+# include dot-files (if present) when cp or rm
+shopt -s dotglob
+# for sed
+SUBSTITUTE="--in-place --regexp-extended --expression="
+
+mkdir -pv /cms/log/
+#mkdir -pv /cms/uwsgi/
+#chown -Rv www-data:www-data /cms/uwsgi/ # prevent permissions problems
+
+cd /cms/
+
+# Checking , if Django-CMS was already installed
+if [ ! -e /cms/manage.py ]; then
+    djangocms --config-file config/cms-installer.ini website1 
+    # create an admin user
+    echo "from django.contrib.auth.models import User; User.objects.create_superuser('${ADMIN_USER}', '${ADMIN_EMAIL}', '${ADMIN_PASSWD}')" | python manage.py shell
+    echo -e "\n==========================================================================================="
+    echo    "[info] Django-CMS: Installation Complete!"
+    echo -e "[info] Created User: ${ADMIN_USER} with Password: ${ADMIN_PASSWD} and Email: ${ADMIN_EMAIL}\n"
+else
+    python manage.py migrate
+    echo -e "\n==========================================================================================="
+    echo -e "[info] Django-CMS: using an existing Django CMS project\n"
+fi
+
+# Switch settings.py to debug or production mode
+if [ ${MODE} == "production" ]; then
+    # In production mode, static files will be served by nginx only       
+    sed ${SUBSTITUTE}"s/DEBUG = True/DEBUG = False/" website1/settings.py
+    # Allow all hosts, or set an actual host (needed for production mode):
+    sed ${SUBSTITUTE}"s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = \[\"\*\"\]/" website1/settings.py
+    # Collect static files for nginx during each start of container
+    python manage.py collectstatic --noinput --verbosity=2 >> log/collectstatic.log
+    echo -e "[info] Running in 'production' mode, login first at http://example.com:80/admin then /?edit\n"
+elif [ ${MODE} == "debug" ]; then
+    echo -e "[info] Running in 'debug' mode, access at http://example.com:8000/?edit\n"
+    # Static files will be served by django       
+    sed ${SUBSTITUTE}"s/DEBUG = False/DEBUG = True/" website1/settings.py
+    python manage.py runserver 0.0.0.0:8000
+else 
+    echo -e "[warn] Specify a valid MODE: production | debug"
+fi
+echo -e "===========================================================================================\n"
+# else default to run whatever the user wanted like "bash"
+exec "$@"

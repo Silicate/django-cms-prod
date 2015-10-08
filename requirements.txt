@@ -1,0 +1,61 @@
+# 
+supervisor                         
+uwsgi
+
+# djangocms-installer  0.8.0 did not work with ini file properly, thus using >=0.8.1.dev1
+https://github.com/nephila/djangocms-installer/archive/develop.zip
+
+# djangocms-installer dependencies: 
+argparse
+six
+dj-database-url
+pytz
+tzlocal
+html5lib
+
+Pillow>=2.9                         # Pillow>=2.3
+psycopg2==2.6.1                     # required for django.db.backends.postgresql_psycopg2
+
+# Django CMS                        # see https://github.com/divio/django-cms-demo/blob/master/requirements.txt
+Django>=1.7,<1.8                    # rq.filter: <1.8 (still some issues running with >=1.8)
+django-cms>=3.1.0,<3.2
+django-reversion==1.8.7             # or django-reversion>=1.8.2,<1.8.6, not a part of django-cms core
+djangocms-text-ckeditor==2.5.3      # not a part of django-cms core
+django-treebeard>=3.0               # or django-treebeard>=2.0
+django-sekizai>=0.8                 # or django-sekizai>=0.7
+django-classy-tags>=0.3.4.1         # from djangocms-installer requirements dump
+django-filer>=0.9
+cmsplugin-filer>=0.10.2
+
+# from djangocms-installer requirements dump
+djangocms-admin-style
+djangocms-column
+djangocms-flash
+djangocms-googlemap
+djangocms-inherit
+djangocms-link
+djangocms-style
+djangocms-file
+djangocms-picture
+djangocms-teaser
+djangocms-video
+
+django-taggit
+django-sortedm2m
+djangocms-grid
+djangocms-oembed
+djangocms-table
+djangocms-snippet                     # or djangocms_snippet
+
+## additional Aldryn addons
+# always freeze versions, requires.io will show outdated dependencies
+# aldryn-bootstrap3>=0.5.1            # adds django-filer
+# aldryn-boilerplates>=0.7.2
+# aldryn-style>=0.2.1
+# aldryn-newsblog>=1.0.0              # adds boilerplates, parler...
+# aldryn-faq>=1.0.0
+# aldryn-events>=1.0.0
+# aldryn-jobs>=1.0.1
+# aldryn-categories>=1.0.0
+# aldryn-people>=1.0.1
+# aldryn-forms

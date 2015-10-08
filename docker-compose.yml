@@ -1,0 +1,25 @@
+DATA:
+    image: image: tianon/true
+    volumes:
+        - /var/lib/postgresql/data
+    command: true
+
+host:
+    image: postgres:latest
+    restart: always
+    volumes_from:
+        - DATA
+    environment:
+        - POSTGRES_PASSWORD=dre7jed6an2pas1yug9j
+
+cms:
+    build: .
+    restart: always
+    environment:
+        - MODE=production
+        - DB_NAME=postgres
+    links:
+        - dbhost:dbhost
+    ports:
+        - 8280:80
+        - 8200:8000
