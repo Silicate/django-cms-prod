@@ -4,18 +4,23 @@ FROM python:2.7
 
 ENV LANG=C.UTF-8 \
     PYTHONUNBUFFERED=1 \
-    PIP_REQUIRE_VIRTUALENV=false 
-
-# installs uWSGI and django-CMS with plugins 
-COPY ./requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt && \
-	mkdir -v /uwsgi/
+    PIP_REQUIRE_VIRTUALENV=false \
+    TERM=xterm
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install netcat nano && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install \
+        netcat nano && \
     apt-get clean && rm -r /var/lib/apt/lists/*
 
+# install uWSGI, djangocms-installer & PostgreSQL adapter
+# TODO: move /requirements-cms.txt back to config
+COPY ./requirements-cms.txt /requirements-cms.txt
+RUN pip install -r /requirements-cms.txt && \
+	mkdir -v /uwsgi/ && \
+    chown -Rv www-data:www-data /uwsgi
+
 COPY ./config/ /config/
+COPY ./scripts/ /usr/local/bin/
 
 VOLUME [ "/cms", "/config", "/uwsgi"]
 
@@ -23,6 +28,6 @@ EXPOSE 8000
 WORKDIR /cms
 
 # Install django-CMS site on first-run of container
-ENTRYPOINT ["/config/docker-entrypoint"]
+ENTRYPOINT ["docker-entrypoint"]
 
-CMD ["/usr/local/bin/uwsgi", "--ini", "/config/uwsgi.ini"]
+CMD ["uwsgi", "--ini", "/config/uwsgi.ini"]

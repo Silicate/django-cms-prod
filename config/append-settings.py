@@ -4,12 +4,14 @@
 
 ## set production settings:
 #SECRET_KEY = 'some_randomly_generated_string_of_ascii'
-DEBUG = False
-TEMPLATE_DEBUG = False
 
 ## add more apps:
-#INSTALLED_APPS += ('another_app',)
+INSTALLED_APPS +=  ('djangocms_snippet',
+)
 
 ## add more modules: (merging 2 dictionaries)
-#MIGRATION_MODULES_ADD = {'another_app_image': 'another_app.migrations_django',}
-#MIGRATION_MODULES.update(MIGRATION_MODULES_ADD) 
+MIGRATION_MODULES_ADD =    {'djangocms_snippet': 'djangocms_snippet.migrations_django',
+}
+MIGRATION_MODULES.update(MIGRATION_MODULES_ADD) 
+
+# --- docker-entrypoint will append ALLOWED_HOSTS below --- #

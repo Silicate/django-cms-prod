@@ -1,0 +1,50 @@
+#!/bin/bash
+set -e
+#set -x
+
+# The script installs Django-CMS, only on first run of container
+#   - the site will be installed in /cms/website1
+#   - it will preserve data when recreating containers
+#   - it enables installing into a mounted docker data-volume
+
+# include dot-files (if present) when cp or rm
+shopt -s dotglob
+cd /cms/
+
+# install django-CMS site with djangocms-installer (if no existing project is found)
+echo -e "\n===========================================================================================\n"
+if [ ! -e /cms/manage.py ]; then
+    echo "[info] django-CMS: installation started..."
+    echo -e "\nALLOWED_HOSTS = ${ALLOWED_HOSTS}" >> /config/append-settings.py
+    echo -e "\ndb = postgres://${DBHOST_ENV_POSTGRES_USER}:${DBHOST_ENV_POSTGRES_PASSWORD}@dbhost:5432/${DBHOST_ENV_POSTGRES_USER}" >> /config/cms-installer.ini
+    pip install -r /config/requirements.txt
+    djangocms --config-file /config/cms-installer.ini website1
+echo -e "\n\n==========================================================================================="
+echo    "[info] django-CMS: installation complete!"
+else
+    #echo "[info] Synchronize the database state with the current set of models and migrations."
+    #python manage.py migrate
+    echo -e "\n==========================================================================================="
+    echo -e "[info] django-CMS: using an existing project\n"
+fi
+
+printf  "[info] waiting for PostgreSQL container.."
+connect="OFFLINE"; i=0
+until [ $connect == "ONLINE" ] || [ "$i" -eq 15 ]
+do
+    nc -v -z -w 1 dbhost 5432 &> /dev/null && connect="ONLINE" || connect="OFFLINE"
+    printf "."; sleep 1
+    let "i+=1"
+done
+echo " ${connect}"
+
+# create an admin user as provided by env variables (checks first, if user exists)
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); print '[info] ${ADMIN_USER} exists' if User.objects.filter(username='${ADMIN_USER}').exists() else User.objects.create_superuser('${ADMIN_USER}', '${ADMIN_EMAIL}', '${ADMIN_PASSWD}')" | python manage.py shell
+echo -e "[info] User: ${ADMIN_USER} with Password: ${ADMIN_PASSWD} and Email: ${ADMIN_EMAIL}\n"
+
+# disable debug mode for production & collect static files
+mode-production
+echo -e "===========================================================================================\n"
+
+# else default to run whatever the user wanted like "bash"
+exec "$@"

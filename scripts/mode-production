@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+cd /cms
+
+# disable debug mode for production
+perl -i -pe 's(\QDEBUG = True)(DEBUG = False)' website1/settings.py
+echo "[info] settings for production:"
+cat website1/settings.py | grep DEBUG
+
+# static files will be served by nginx
+echo "[info] collecting static files..." 
+python manage.py collectstatic --noinput --verbosity=2 >> /var/log/collectstatic.log
+chown -R www-data:www-data media static
+echo "[info] Running in 'production' mode, login first at http://example.com:80/admin then /?edit"

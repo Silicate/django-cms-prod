@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+cd /cms
+
+# enable debug mode
+perl -i -pe 's(\QDEBUG = False)(DEBUG = True)' website1/settings.py
+echo "settings for debug:"
+cat website1/settings.py | grep DEBUG
+
+# run development server in the foreground as the www-data user
+echo "[info] Running in 'debug' mode, login at http://example.com:8000/?edit"
+chown -R www-data:www-data media static
+su -s /bin/bash www-data -c "python manage.py runserver 0.0.0.0:8000"
+
+read -r -p "Restore settings to production mode? [Y/n] " response
+response=${response,,}    # tolower
+if [[ $response =~ ^(no|n)$ ]]; then
+    exit 0
+else
+    mode-production
+fi

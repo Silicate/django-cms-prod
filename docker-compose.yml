@@ -9,7 +9,7 @@ dbhost:
     volumes_from:
         - DATA
     environment:
-        ## change password here and in cms-installer.ini
+        ## change password
         POSTGRES_USER: djangocms
         POSTGRES_PASSWORD: PASS7jed6an2pas1yug9WORD
 uwsgi:
@@ -29,7 +29,7 @@ uwsgi:
     links:
         - dbhost:dbhost
     ports:
-        - "8200:8000"
+        - "38000:8000"
 
 nginx:
     image: nginx:latest
@@ -37,6 +37,7 @@ nginx:
     volumes_from:
         - uwsgi
     volumes:
-        - ./nginx/conf.d:/etc/nginx/conf.d:ro
+        - ./nginx/conf.d:/etc/nginx/conf.d
     ports:
-        - "280:80"
+        - "30080:80"
+        - "30443:443"
