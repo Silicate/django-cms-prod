@@ -1,25 +1,42 @@
 DATA:
-    image: image: tianon/true
+    image: tianon/true
     volumes:
         - /var/lib/postgresql/data
-    command: true
 
-host:
-    image: postgres:latest
+dbhost:
+    image: postgres:9.4
     restart: always
     volumes_from:
         - DATA
     environment:
-        - POSTGRES_PASSWORD=dre7jed6an2pas1yug9j
-
-cms:
+        ## change password here and in cms-installer.ini
+        POSTGRES_USER: djangocms
+        POSTGRES_PASSWORD: PASS7jed6an2pas1yug9WORD
+uwsgi:
     build: .
     restart: always
     environment:
-        - MODE=production
-        - DB_NAME=postgres
+        ## change password, email & hosts
+        ADMIN_USER: admin
+        ADMIN_PASSWD: djangocms321
+        ADMIN_EMAIL: admin@example.com
+        #ALLOWED_HOSTS: ["*"]
+        #ALLOWED_HOSTS: [".example.com", ".example.org", "127.0.0.1"]
+        ALLOWED_HOSTS: [".lightinasia.org"]
+        MODE: production
+    volumes:
+        - ./cms-project:/cms
     links:
         - dbhost:dbhost
     ports:
-        - 8280:80
-        - 8200:8000
+        - "8200:8000"
+
+nginx:
+    image: nginx:latest
+    restart: always
+    volumes_from:
+        - uwsgi
+    volumes:
+        - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+        - "280:80"

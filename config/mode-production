@@ -1,0 +1,4 @@
+#!/bin/bash
+perl -i -pe 's(\QDEBUG = True)(DEBUG = False)' website1/settings.py
+echo "settings for production:"
+cat website1/settings.py | grep DEBUG

@@ -1,0 +1,5 @@
+#!/bin/bash
+perl -i -pe 's(\QDEBUG = False)(DEBUG = True)' website1/settings.py
+echo "settings for debug:"
+cat website1/settings.py | grep DEBUG
+python manage.py runserver 0.0.0.0:8000
