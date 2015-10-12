@@ -30,11 +30,12 @@ uwsgi:
         ADMIN_PASSWD: djangocms321
         CMS_SECRET_KEY: whalyajkojmacdywaykpylkarpiowaithelbinsyqkxzubilmq
         # allows all hosts ["*"] is insecure: 
-        ALLOWED_HOSTS: ["*"]
-        #ALLOWED_HOSTS: [".example.org", "127.0.0.1", "localhost"]
+        CMS_ALLOWED_HOSTS: ["*"]
+        #CMS_ALLOWED_HOSTS: [".example.org", "127.0.0.1", "localhost"]
 
-    # django-cms will be installed in the cms directory (or use an existing project in cms-project)   
+    # django-cms will be installed in the /cms directory, if empty
     volumes:
+        # modify mounted host directory (an existing project can be used)
         - ./cms-project:/cms
 
 nginx:

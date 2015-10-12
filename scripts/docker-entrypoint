@@ -59,7 +59,7 @@ echo "from django.contrib.auth import get_user_model; User = get_user_model(); p
 echo -e "\n[info] Login User: ${ADMIN_USER} Password: ${ADMIN_PASSWD} at http://example.org/admin - '${CMS_MODE}' mode! "
 
 # collect static files
-mode-production
+collect-static
 echo -e "===========================================================================================\n"
 
 # else default to run whatever the user wanted like "bash"

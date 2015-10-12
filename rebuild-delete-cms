@@ -5,16 +5,10 @@ response=${response,,}    # tolower
 if [[ $response =~ ^(yes)$ ]]; then
 	docker-compose stop
 	docker-compose rm -f
-	echo "removing cms-project"
+	echo "Removing cms-project"
     rm -rf cms-project/
 	docker-compose build
 	docker-compose up -d
     set +e
 	docker-compose logs
-	docker logs djangocms_uwsgi_1
-	read -r -p "Enter djangocms_uwsgi_1 container with docker exec? [y/N] " response
-	response=${response,,}    # tolower
-	if [[ $response =~ ^(yes|y)$ ]]; then
-	    docker exec -it djangocms_uwsgi_1 bash
-	fi
 fi
