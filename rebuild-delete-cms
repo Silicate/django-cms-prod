@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-read -r -p "THIS WILL DELETE THE CONTAINERS, DATA AND CMS-PROJECT FILES based on ${PWD} - Are you sure? [yes/N] " response
+read -r -p "THIS WILL DELETE THE CONTAINERS, DATA AND CMS-PROJECT FILES based on ${PWD##*/} - Are you sure? [yes/N] " response
 response=${response,,}    # tolower
 if [[ $response =~ ^(yes)$ ]]; then
 	docker-compose stop
