@@ -12,19 +12,20 @@ django CMS offers out-of-the-box support for the common features you’d expect 
 This Dockerfile with docker-compose allows you to build a Docker container set with a standard
 and speedy setup for django-CMS with uWSGI, Nginx and PostgreSQL. It builds a django-CMS/uWSGI container and links this together with the official Docker images for Nginx and PostgreSQL as well as a Data volume container.
 
-uWSGI from a number of benchmarks has shown to be the fastest server 
+- **uWSGI** from a number of benchmarks has shown to be the fastest server 
 for python applications and allows lots of flexibility.
 
-Nginx has become the standard for serving up web applications and has the 
+- **Nginx** has become the standard for serving up web applications and has the 
 additional benefit that it can talk to uWSGI using the uWSGI protocol, further
 elinimating overhead.
 
-PostgreSQL is the recommended relational database for working with Python web applications. PostgreSQL's feature set, active development and stability contribute to its usage as the backend for millions of applications live on the Web today.
+- **PostgreSQ**L is the recommended relational database for working with Python web applications. PostgreSQL's feature set, active development and stability contribute to its usage as the backend for millions of applications live on the Web today.
 
 Much of this setup comes from the excellent tutorial on 
 https://uwsgi.readthedocs.org/en/latest/tutorials/Django_and_nginx.html
 
-### Quickstart for Testing
+## Quickstart for Testing
+Run the following commands to get started:
 ```
 git clone https://github.com/chriswayg/django-cms-prod.git
 cd django-cms-prod
@@ -42,7 +43,7 @@ You can also run a debug session in the foreground with:
 docker exec -it djangocmsprod_uwsgi_1 mode-dev
 ```
 
-### Modify Settings for Production use
+## Modify Settings for Production use
 
 A django-CMS site is created in /cms. You can also mount an existing project there.
 
@@ -61,6 +62,8 @@ A django-CMS site is created in /cms. You can also mount an existing project the
 - add developer settings to ```settings_dev.py```
 - check uWSGI settings in ```uwsgi.ini```
 - check nginx configuration in ```nginx/conf.d/djangocms.conf```
+
+After editing the configurations run:
 ```
 docker-compose build
 docker-compose up -d
