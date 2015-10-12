@@ -1,8 +1,0 @@
-# basic cms requirements          
-uwsgi
-
-# djangocms-installer  0.8.0 did not work with ini file properly, thus using >=0.8.1.dev1
-https://github.com/nephila/djangocms-installer/archive/develop.zip
-
-# required for django.db.backends.postgresql_psycopg2
-psycopg2==2.6.1                     

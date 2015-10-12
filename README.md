@@ -45,6 +45,9 @@ This repo is a fork of https://github.com/dockerfiles/django-uwsgi-nginx,
 Feel free to clone this and modify it to your liking. And feel free to 
 contribute patches.
 
+### Dockerfile notes:
+ - not using python 3, because aldryn-people & aldryn-newsblog have a dependency problem with vobject: https://github.com/aldryn/aldryn-people/issues/28
+
 # Licensed under the Apache License, Version 2.0 (see LICENSE.md)
 
 ...

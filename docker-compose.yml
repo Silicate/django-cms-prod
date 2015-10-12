@@ -9,35 +9,39 @@ dbhost:
     volumes_from:
         - DATA
     environment:
-        ## change password
+        ### CHANGE PASSWORD! ###
         POSTGRES_USER: djangocms
         POSTGRES_PASSWORD: PASS7jed6an2pas1yug9WORD
+
 uwsgi:
     build: .
     restart: always
-    environment:
-        ## change password, email & hosts
-        ADMIN_USER: admin
-        ADMIN_PASSWD: djangocms321
-        ADMIN_EMAIL: admin@example.com
-        #ALLOWED_HOSTS: ["*"]
-        #ALLOWED_HOSTS: [".example.com", ".example.org", "127.0.0.1"]
-        ALLOWED_HOSTS: [".lightinasia.org"]
-        MODE: production
-    volumes:
-        - ./cms-project:/cms
     links:
         - dbhost:dbhost
     ports:
-        - "38000:8000"
+        - "8000:8000"
+    environment:
+        #ADMIN_USER: admin
+        #ADMIN_EMAIL: admin@example.org
+        #NGINX_SERVER_NAME: example.org
+
+        ### required settings: CHANGE secret key & hosts. CHANGE PASSWORD in django-CMS after login!
+        CMS_MODE: production
+        ADMIN_PASSWD: djangocms321
+        CMS_SECRET_KEY: whalyajkojmacdywaykpylkarpiowaithelbinsyqkxzubilmq
+        # allows all hosts ["*"] is insecure: 
+        ALLOWED_HOSTS: ["*"]
+        #ALLOWED_HOSTS: [".example.org", "127.0.0.1", "localhost"]
+
+    # django-cms will be installed in the cms directory (or use an existing project in cms-project)   
+    volumes:
+        - ./cms-project:/cms
 
 nginx:
     image: nginx:latest
     restart: always
+    ports:
+        - "80:80"
+        - "443:443"
     volumes_from:
         - uwsgi
-    volumes:
-        - ./nginx/conf.d:/etc/nginx/conf.d
-    ports:
-        - "30080:80"
-        - "30443:443"

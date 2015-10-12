@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+cd /cms
+
+# run development server in the foreground as the www-data user
+echo "[info] Running in 'debug' mode, login at http://example.com:8000/?edit"
+# enable, that files can be accessed & uploaded by www-data
+chown -R www-data:www-data media static
+su -s /bin/bash www-data -c "python manage.py runserver 0.0.0.0:8000 --settings=website1.settings_dev"
+
+mode-production
