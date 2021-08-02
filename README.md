@@ -63,10 +63,10 @@ docker exec -it djangocmsprod_uwsgi_1 mode-dev
 
 --This does not work out of box for me I'm getting this error:
 
-"~/django-cms-prod$ docker-compose up -d
+```~/django-cms-prod$ docker-compose up -d
 ERROR: The Compose file './docker-compose.yml' is invalid because:
 uwsgi.environment.CMS_ALLOWED_HOSTS contains ["*"], which is an invalid type, it should be a string, number, or a null"
-
+```
 
 ## Modify Settings for Production use
 
